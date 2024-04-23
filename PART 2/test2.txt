@@ -1,0 +1,1 @@
+public String my_str = “H3ll0”;
