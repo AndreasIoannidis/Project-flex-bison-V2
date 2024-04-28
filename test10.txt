@@ -1,0 +1,7 @@
+if (i < 5) {
+            out.print("Value of i is less than 5");
+        } else if (i == 5) {
+            .out.print("Value of i is 5");
+        } else {
+            out.println("Value of i is greater than 5");
+        }

@@ -1,0 +1,10 @@
+switch(day) {
+            case 1:
+                out.println("monday");
+                
+            case 2:
+                out.println("tuesday");
+
+            default:
+                out.println("sunday");
+        } 

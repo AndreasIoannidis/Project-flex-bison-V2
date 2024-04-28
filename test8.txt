@@ -1,0 +1,7 @@
+do
+ {
+
+        out.print("hello world");
+
+
+    } while (i <= 5);
