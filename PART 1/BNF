@@ -1,122 +1,132 @@
-<program>              ::= <class_declaration> 
-                      | <variable_declaration> 
-                      | <object_creation> 
-                      | <member_access> 
-                      | <method_declaration> 
-                      | <statement> 
-                      | <assignment> 
-                      | <do_while_loop> 
-                      | <condition> 
-                      | <for_loop> 
-                      | <if_statement> 
-                      | <switch_statement>
-                      ;
+<program>              ::= <class_declaration_list>
 
-<variable_declaration> ::= <data_type> <identifier> SEMICOLON
-                           ;
+<class_declaration_list> ::= <class_declaration>
+                           | <class_declaration_list> <class_declaration>
 
-<class_declaration>   ::= <access_modifier> CLASS <identifier> LBRACE <method_declaration> RBRACE
-                          ;
+<class_declaration>   ::= <access_specifier> CLASS IDENTIFIER LBRACE <class_body> RBRACE
 
-<method_declaration> ::= <access_modifier> <return_type> <identifier> LPAREN RPAREN LBRACE <statement> RBRACE SEMICOLON
-                         | <access_modifier> <return_type> <identifier> LPAREN RPAREN LBRACE <statement> RBRACE
-                         ;
+<class_body>          ::= <class_member_list>
 
-<statement>           ::= <expression_statement>
-                         | PRINTLN LPAREN STRING_LITERAL RPAREN SEMICOLON
-                         | PRINT LPAREN STRING_LITERAL RPAREN SEMICOLON
-                         | PRINT LPAREN STRING_LITERAL COMMA <identifier> RPAREN SEMICOLON
-                         | <if_statement>
-                         | <do_while_loop>
-                         | <for_loop>
-                         | <switch_statement>
-                         | <object_creation>
-                         | <method_declaration>
-                         | <variable_declaration>
-                         | RETURN <expression> SEMICOLON
-                         | BREAK SEMICOLON
-                         | COMMENTS
-                         ;
+<class_member_list>   ::= <class_member>
+                           | <class_member_list> <class_member>
+                           | <method_definition>
 
-<expression_statement> ::= <identifier> DOT <identifier> LPAREN STRING_LITERAL RPAREN SEMICOLON
-                           | <identifier>
-                           ;
+<class_member>        ::= <variable_declaration_list>
+                           | <object_creation>
+                           | <member_access>
+                           | <assignment_statement>
+                           | <do_while_loop>
+                           | <for_loop>
+                           | <if_statement>
+                           | <switch_statement>
+                           | <print_statement>
 
-<assignment>          ::= <identifier> ASSIGNMENT <expression> SEMICOLON
-                          ;
+<do_while_loop>       ::= DO LBRACE <statement_list> RBRACE WHILE LPAREN <expression> RPAREN SEMICOLON
 
-<expression>          ::= <identifier>
-                          | NUMBER
-                          | <expression> PLUS <expression>
-                          | <expression> MINUS <expression>
-                          | <expression> MULT <expression>
-                          | <expression> DIV <expression>
-                          | LPAREN <expression> RPAREN
-                          ;
+<for_loop>            ::= FOR LPAREN <assignment_statement> SEMICOLON <expression> SEMICOLON <assignment_statement> RPAREN LBRACE <statement_list> RBRACE
 
-<data_type>           ::= <primitive_type>
-                          | <modifier> <data_type>
-                          ;
+<if_statement>        ::= IF LPAREN <expression> RPAREN LBRACE <statement_list> RBRACE <else_if_blocks> <else_block>
 
-<primitive_type>      ::= INT
-                          | CHAR
-                          | DOUBLE
-                          | STRING
-                          | BOOLEAN
-                          ;
+<else_if_blocks>      ::= /* empty */
+                           | <else_if_blocks> ELSEIF LPAREN <expression> RPAREN LBRACE <statement_list> RBRACE
 
-<modifier>            ::= PUBLIC
-                          | PRIVATE
-                          | /* Κανένας modifier */
-                          ;
+<else_block>          ::= /* empty */
+                           | ELSE LBRACE <statement_list> RBRACE
 
-<object_creation>     ::= <identifier> <identifier> ASSIGNMENT NEW <identifier> LPAREN RPAREN SEMICOLON
-                          ;
+<switch_statement>    ::= SWITCH LPAREN <expression> RPAREN LBRACE <case_blocks> <default_block> RBRACE
 
-<member_access>       ::= <identifier> DOT <identifier> LPAREN RPAREN SEMICOLON
-                          | <identifier> DOT <identifier> SEMICOLON
-                          ;
+<case_blocks>         ::= /* empty */
+                           | <case_blocks> CASE <expression> COLON <statement_list>
 
-<do_while_loop>       ::= DO LBRACE <program> RBRACE WHILE LPAREN <condition> RPAREN SEMICOLON
-                          ;
+<default_block>       ::= /* empty */
+                           | DEFAULT COLON <statement_list>
 
-<condition>           ::= <expression>
-                          | <expression> <comp_operator> <expression>
-                          | LPAREN <condition> RPAREN
-                          | <condition> <logical_operator> <condition>
-                          ;
+<print_statement>     ::= PRINTLN LPAREN STRING_LITERAL RPAREN SEMICOLON
+                           | PRINTLN LPAREN STRING_LITERAL COMMA <expression> RPAREN SEMICOLON
 
-<logical_operator>    ::= AND
-                          | OR
-                          ;
+<method_definition>   ::= <access_specifier> <type_specifier> IDENTIFIER LPAREN <parameter_list> RPAREN LBRACE <method_body> RBRACE
+                           | <access_specifier> VOID IDENTIFIER LPAREN <parameter_list> RPAREN LBRACE <method_body> RBRACE
 
-<comp_operator>       ::= GREATER
-                          | LESS
-                          | EQUAL
-                          | NOTEQUAL
-                          | GTEQ
-                          | LTEQ
-                          ;
+<method_body>         ::= /* empty */
+                           | <statement_list>
 
-<for_loop>            ::= FOR LPAREN <assignment_statement> SEMICOLON <condition> SEMICOLON <assignment_statement> RPAREN LBRACE <statement> RBRACE
-                          ;
+<statement>           ::= /* empty */
+                           | RETURN <expression> SEMICOLON
+                           | <variable_declaration_list>
+                           | <object_creation>
+                           | <member_access>
+                           | <assignment_statement>
+                           | <do_while_loop>
+                           | <for_loop>
+                           | <if_statement>
+                           | <method_definition>
+                           | <method_call>
+                           | <switch_statement>
+                           | BREAK SEMICOLON
+                           | <print_statement>
+                           | COMMENTS
 
-<assignment_statement> ::= <identifier> ASSIGNMENT <expression>
-                            ;
+<statement_list>      ::= /* empty */
+                           | <statement_list> <statement>
 
-<if_statement>        ::= IF LPAREN <condition> RPAREN LBRACE <program> RBRACE
-                          | IF LPAREN <condition> RPAREN LBRACE <program> RBRACE ELSE LBRACE <program> RBRACE
-                          | IF LPAREN <condition> RPAREN LBRACE <program> RBRACE ELSEIF LPAREN <condition> RPAREN LBRACE <program> RBRACE
-                          | <if_statement> ELSEIF LPAREN <condition> RPAREN LBRACE <program> RBRACE
-                          | <if_statement> ELSE LBRACE <program> RBRACE
-                          ;
+<assignment_statement>::= IDENTIFIER ASSIGNMENT <expression> SEMICOLON
+                           | IDENTIFIER ASSIGNMENT <expression>
+                           | <type_specifier> IDENTIFIER ASSIGNMENT <expression>
 
-<switch_statement>    ::= SWITCH LPAREN <condition> RPAREN LBRACE <switch_case> <default_case> RBRACE
-                          ;
+<parameter_list>      ::= /* empty */
+                           | <parameter_declaration>
+                           | <parameter_list> COMMA <parameter_declaration>
 
-<switch_case>         ::= CASE <condition> COLON <statement>
-                          | <switch_case> CASE <condition> COLON <statement>
-                          ;
+<parameter_declaration>::= <type_specifier> IDENTIFIER
 
-<default_case>        ::= DEFAULT COLON <statement>
-                          ;
+<member_access>       ::= IDENTIFIER DOT IDENTIFIER SEMICOLON
+
+<object_creation>     ::= IDENTIFIER IDENTIFIER ASSIGNMENT NEW IDENTIFIER LPAREN RPAREN SEMICOLON
+
+<access_specifier>    ::= PUBLIC
+                           | PRIVATE
+                           | VOID
+
+<variable_declaration_list> ::= <variable_declaration>
+                                  | <variable_declaration_list> <variable_declaration>
+
+<variable_declaration>::= <type_specifier> IDENTIFIER SEMICOLON 
+                           | <access_specifier> <type_specifier> IDENTIFIER SEMICOLON
+                           | <type_specifier> IDENTIFIER ASSIGNMENT <expression> SEMICOLON 
+                           | <access_specifier> <type_specifier> IDENTIFIER ASSIGNMENT <expression> SEMICOLON
+                           | <type_specifier> IDENTIFIER ASSIGNMENT <expression>
+
+<type_specifier>      ::= INT
+                           | CHAR
+                           | STRING
+                           | DOUBLE
+                           | BOOLEAN
+                           | VOID
+
+<expression>          ::= IDENTIFIER
+                           | NUMBER
+                           | <expression> PLUS <expression>
+                           | <expression> MINUS <expression>
+                           | <expression> MULT <expression>
+                           | <expression> DIV <expression>
+                           | LPAREN <expression> RPAREN
+                           | <method_call>
+                           | <object_creation>
+                           | <logical_expression>
+                           | STRING_LITERAL
+                           | <assignment_statement>
+
+<logical_expression>  ::= <expression> GREATER <expression>
+                           | <expression> LESS <expression>
+                           | <expression> EQUAL <expression>
+                           | <expression> NOTEQUAL <expression>
+                           | <expression> GTEQ <expression>
+                           | <expression> LTEQ <expression>
+                           | <logical_expression> AND <logical_expression>
+                           | <logical_expression> OR <logical_expression>
+                           | NOT <logical_expression>
+
+<method_call>         ::= IDENTIFIER LPAREN RPAREN
+                           | IDENTIFIER LPAREN <expression> RPAREN
+                           | IDENTIFIER LPAREN RPAREN SEMICOLON
+                           | IDENTIFIER LPAREN <expression> RPAREN SEMICOLON
